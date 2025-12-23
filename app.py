@@ -16,7 +16,7 @@ st.markdown("輸入股票代號，自動抓取最新股價並定時刷新。")
 # 側邊欄設定
 with st.sidebar:
     st.header("設定")
-    default_symbols = "AAPL, 2330.TW, TSLA, NVDA, 0050.TW"
+    default_symbols = "AAPL, TSLA, NVDA, 2330.TW, 2317.TW, 2618.TW"
     symbols_input = st.text_area("輸入股票代號 (用逗號分隔)", value=default_symbols, height=150)
     
     refresh_rate = st.slider("刷新頻率 (秒)", min_value=5, max_value=300, value=10)
