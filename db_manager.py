@@ -45,9 +45,8 @@ def register_user(username, password):
         hashed_pw = hash_password(password)
         c.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hashed_pw))
         
-        # Create an initial empty watchlist for the user
         user_id = c.lastrowid
-        c.execute('INSERT INTO watchlists (user_id, symbols) VALUES (?, ?)', (user_id, "AAPL, TSLA, NVDA, 2330.TW"))
+        c.execute('INSERT INTO watchlists (user_id, symbols) VALUES (?, ?)', (user_id, "TSLA, NVDA, 1810.HK, ^HSI, ETH-USD"))
         
         conn.commit()
         return True

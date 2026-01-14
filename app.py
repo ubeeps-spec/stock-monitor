@@ -61,6 +61,10 @@ else:
         st.markdown("---")
         st.header("設定")
         current_watchlist = db.get_user_watchlist(st.session_state.user_id)
+        default_watchlist = "TSLA, NVDA, 1810.HK, ^HSI, ETH-USD"
+        if not current_watchlist:
+            current_watchlist = default_watchlist
+        default_watchlist = "TSLA, NVDA, 1810.HK, ^HSI, ETH-USD"
         with st.form("watchlist_form"):
             symbols_input = st.text_area("編輯股票代號 (用逗號分隔)", value=current_watchlist, height=150)
             submitted = st.form_submit_button("儲存清單")
@@ -68,11 +72,22 @@ else:
                 db.update_user_watchlist(st.session_state.user_id, symbols_input)
                 st.success("清單已儲存")
                 current_watchlist = symbols_input
+        apply_default = st.button("套用預設清單")
+        if apply_default:
+            db.update_user_watchlist(st.session_state.user_id, default_watchlist)
+            st.success("已套用預設清單")
+            current_watchlist = default_watchlist
         refresh_rate = st.slider("刷新頻率 (秒)", min_value=5, max_value=300, value=10)
         st.markdown("---")
         st.markdown("**說明：**")
-        st.markdown("- 台股請加 `.TW` (例如 `2330.TW`)")
-        st.markdown("- 美股直接輸入代號 (例如 `AAPL`)")
+        st.markdown("- 台股：加 `.TW`（例如 `2330.TW`, `0050.TW`）")
+        st.markdown("- 美股：直接代號（例如 `AAPL`, `NVDA`, `TSLA`）")
+        st.markdown("- 港股：加 `.HK`（例如 `0700.HK`, `0005.HK`）")
+        st.markdown("- 各國指數：使用 `^` 前綴（例如 `^GSPC` S&P500, `^DJI` 道瓊, `^IXIC` 那斯達克, `^HSI` 恒指, `^TWII` 加權）")
+        st.markdown("- 加密貨幣：`幣種-USD`（例如 `BTC-USD`, `ETH-USD`）")
+        st.markdown("- 外匯：`貨幣對=X`（例如 `USDJPY=X`, `EURUSD=X`）")
+        st.markdown("- 商品/期貨：`代碼=F`（例如 `GC=F` 黃金, `CL=F` 原油, `ES=F` S&P 期貨）")
+        st.markdown("- ETF：直接代號（例如 `SPY`, `QQQ`, `2800.HK`）")
 
     if current_watchlist:
         symbols = [s.strip() for s in current_watchlist.split(",") if s.strip()]
